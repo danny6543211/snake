@@ -7,8 +7,7 @@ void gotoxy(int x, int y);
 void menu();
 void start();
 void init_snake();
-// void map();
+void map();
 // class point;
-typedef _snake snake;
 
 #endif
