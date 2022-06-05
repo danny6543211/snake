@@ -6,7 +6,9 @@ static int choice;
 void gotoxy(int x, int y);
 void menu();
 void start();
+void init_snake();
 // void map();
-class point;
+// class point;
+typedef _snake snake;
 
 #endif

@@ -22,3 +22,14 @@ void map() {
 
 
 }
+
+class xy_point {
+    public:
+        void set(int a, int b) {
+            x = a;
+            y = b;
+        }
+    private:
+        int x;
+        int y;
+};

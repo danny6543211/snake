@@ -36,7 +36,7 @@ void start() {
     if (choice == 3)
         exit(0);
     if (choice == 1) {
-        // map();
+        // ...
     }
 }
 
@@ -49,13 +49,18 @@ void gotoxy(int x, int y) {
     SetConsoleCursorPosition(hOut, pos);
 }
 
-class xy_point {
-    public:
-        void set(int a, int b) {
-            x = a;
-            y = b;
-        }
-    private:
-        int x;
-        int y;
+// snake
+struct _snake {
+    int x;
+    int y;
+    struct _snake *next;
 };
+
+// 初始化蛇
+void init_snake() {
+    snake *tail = (snake*)malloc(sizeof(snake));
+    tail -> x = 20;
+    tail -> y = 20;
+    tail -> next = nullptr;
+    
+}
