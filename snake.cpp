@@ -1,9 +1,10 @@
 #include<iostream>
-using namespace std;
 #include "snake.h"
+#include<windows.h>
+using namespace std;
 
 // 菜單
-int menu() {
+void menu() {
     for (int i = 0; i < 7; i++) {
         cout << endl;
     }
@@ -26,27 +27,35 @@ int menu() {
         cout << endl;   
     }
     cout << ":";
-    int choice;
+    extern int choice;
     cin >> choice;
-    return choice;
 }
 
-void map() {
-    for (int i = 0; i < 80; i++) {
-        cout << "*";
-    }   
-    cout << endl;
-    for (int i = 0; i < 27; i++) {
-        cout << "*";
-        for (int i = 0; i < 78; i++) {
-            cout << " ";
+// 開始函數
+void start() {
+    if (choice == 3)
+        exit(0);
+    if (choice == 1) {
+        // map();
+    }
+}
+
+// 設置光標
+void gotoxy(int x, int y) {
+    COORD pos;
+    pos.X = x;
+    pos.Y = y;
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(hOut, pos);
+}
+
+class xy_point {
+    public:
+        void set(int a, int b) {
+            x = a;
+            y = b;
         }
-        cout << "*";
-        cout << endl;
-    }
-    for (int i = 0; i < 80; i++) {
-        cout << "*";
-    }
-
-
-}
+    private:
+        int x;
+        int y;
+};
