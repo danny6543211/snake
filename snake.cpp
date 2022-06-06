@@ -11,16 +11,18 @@ typedef struct _snake {
     struct _snake *next;
 }snake;
 
-// 全局變量
-static int choice;
-snake *t_head;
-snake *s_head;
+// wasd
 enum _dict {
     UP = 'w',
     DOWN = 's',
     LEFT = 'a',
     RIGHT = 'd'
 }dict;
+
+// 全局變量
+static int choice;
+snake *t_head;
+snake *s_head;
 
 // 菜單
 void menu() {
@@ -48,9 +50,10 @@ void menu() {
     cout << ":";
     cin >> choice;
     system("cls");
+    hide_cursor();
 }
 
-// 開始函數
+// 開始函數...
 void start() {
     if (choice == 3)
         exit(0);
@@ -58,7 +61,6 @@ void start() {
         map();
         init_snake();
         run();
-        // system("pause");
         // ...
     }
 
@@ -83,7 +85,7 @@ void init_snake() {
     t_head = temp;
     // 蛇頭
     s_head = temp;
-    for (int i = 1; i < 4; i++) {
+    for (int i = 1; i < 5; i++) {
         snake *p = (snake*)malloc(sizeof(snake));
         p -> x = 20 + i;
         p -> y = 20;
@@ -93,7 +95,7 @@ void init_snake() {
     s_head -> next = nullptr;
 }
 
-//地圖跟記分板
+//地圖
 void map() {
     int temp;
     for (int i = 0; i < 80; i++) {
@@ -149,7 +151,7 @@ void move_snake() {
     t_head = temp;
 }
 
-// 開始遊戲
+// 開始遊戲...
 void run() {
     char ch;
     while (1) {
@@ -178,7 +180,24 @@ void run() {
         //打印蛇
         pri_snake();
         // 判斷死亡與食物
+        
+        
+        
+        
+        
+        
+        
         Sleep(1000);
     }
+}
+
+// 隱藏光標
+void hide_cursor()
+{
+	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO CursorInfo;
+	GetConsoleCursorInfo(handle, &CursorInfo);
+	CursorInfo.bVisible = false;
+	SetConsoleCursorInfo(handle, &CursorInfo);
 }
 

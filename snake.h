@@ -1,6 +1,7 @@
 #ifndef SNAKE_H_
 #define SNAKE_H_
 
+void hide_cursor();
 void gotoxy(int, int);
 void menu();
 void start();
