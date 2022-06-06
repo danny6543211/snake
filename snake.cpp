@@ -3,6 +3,9 @@
 #include<windows.h>
 using namespace std;
 
+
+int choice;
+
 // 菜單
 void menu() {
     for (int i = 0; i < 7; i++) {
@@ -27,7 +30,6 @@ void menu() {
         cout << endl;   
     }
     cout << ":";
-    extern int choice;
     cin >> choice;
     system("cls");
 }
@@ -82,7 +84,6 @@ void init_snake() {
         cout << "*";
         temp = temp -> next;
     }
-    // ..讓蛇動
 }
 
 void map() {
