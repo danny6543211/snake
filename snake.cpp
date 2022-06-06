@@ -1,28 +1,37 @@
-#include<iostream>
 #include "snake.h"
+#include<iostream>
 #include<windows.h>
 #include<conio.h>
+#include<ctime>
 using namespace std;
 
 // snake
-typedef struct _snake {
+typedef struct _SNAKE {
     int x;
     int y;
-    struct _snake *next;
+    struct _SNAKE *next;
 }snake;
 
 // wasd
-enum _dict {
+enum _DICT {
     UP = 'w',
     DOWN = 's',
     LEFT = 'a',
     RIGHT = 'd'
 }dict;
 
+// food
+typedef struct _FOOD {
+    int x;
+    int y;
+}food;
+
 // 全局變量
-static int choice;
+int choice;
 snake *t_head;
 snake *s_head;
+food fd;
+int score = 0;
 
 // 菜單
 void menu() {
@@ -60,6 +69,7 @@ void start() {
     if (choice == 1) {
         map();
         init_snake();
+        cre_food();
         run();
         // ...
     }
@@ -177,18 +187,22 @@ void run() {
         }
         // 移動蛇
         move_snake();
+        // 如果撞牆
+        if (hit_wall()) {
+            break;;
+        }
         //打印蛇
-        pri_snake();
-        // 判斷死亡與食物
+        pri_snake();        
+        // 如果吃食物
+        if (eat_food()) {
+            score++;
+            cre_food();
+        }
         
         
-        
-        
-        
-        
-        
-        Sleep(1000);
+        Sleep(100);
     }
+    game_over();
 }
 
 // 隱藏光標
@@ -201,3 +215,43 @@ void hide_cursor()
 	SetConsoleCursorInfo(handle, &CursorInfo);
 }
 
+// 撞到牆
+int hit_wall() {
+    if (s_head -> x > 79 || s_head -> x < 1 || s_head -> y > 28 || s_head -> y < 2)
+        return 1;
+    return 0;
+}
+
+// 遊戲結束
+void game_over() {
+    system("cls");
+    cout << "game over" << endl;
+    system("pause");
+}
+
+// 生成食物
+void cre_food() {
+    srand(time(nullptr));
+    fd.x = rand() % 79 + 1;
+    fd.y = rand() % 26 + 2;
+    gotoxy(fd.x, fd.y);
+    cout << "*";
+}
+
+// 吃到食物
+int eat_food() {
+    if ((s_head -> x == fd.x) && (s_head -> y == fd.y)) {
+        // 蛇變長
+        snake *p = (snake*)malloc(sizeof(snake));
+        p -> next = t_head;
+        t_head = p;
+        // 透過新鍊表頭的下一個和下下個的位置相減 再加上下一個的位置 找出新頭要放的位置
+        p -> x = (p -> next) -> x - ((p -> next) -> next) -> x + (p -> next) -> x; 
+        p -> x = (p -> next) -> y - ((p -> next) -> next) -> y + (p -> next) -> y; 
+        return 1;
+    }
+    if ((t_head -> x == fd.x) && (t_head -> y == fd.y)) {
+        cre_food();
+    }
+    return 0;
+}

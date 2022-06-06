@@ -11,5 +11,10 @@ void pri_snake();
 void move_snake();
 void run();
 void test();
+void game_over();
+void cre_food();
+int hit_wall();
+int eat_food();
+
 
 #endif
