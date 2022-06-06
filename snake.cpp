@@ -1,5 +1,6 @@
 #include "snake.h"
 #include<iostream>
+#include<fstream>
 #include<windows.h>
 #include<conio.h>
 #include<ctime>
@@ -26,12 +27,22 @@ typedef struct _FOOD {
     int y;
 }food;
 
+// score
+typedef struct _SCORE {
+    string name;
+    int level;
+}score;
+
 // 全局變量
 int choice;
 snake *t_head;
 snake *s_head;
 food fd;
-int score = 0;
+int level = 1;
+int HP;
+score player;
+int player_count = 0;
+score rank_table[9];
 
 // 菜單
 void menu() {
@@ -64,19 +75,26 @@ void menu() {
 
 // 開始函數...
 void start() {
-    if (choice == 3)
-        exit(0);
-    if (choice == 1) {
-        map();
-        init_snake();
-        cre_food();
-        run();
-        // ...
+    while (1) {
+        menu();
+        if (choice == 3)
+            exit(0);
+        if (choice == 1) {
+            get_player();
+            map();
+            init_snake();
+            cre_food();
+            run();
+            game_over();
+        }
+        if (choice == 2) {
+            read_rank();
+            pri_rank();
+        }
     }
-
 }
 
-// 設置光標
+// 設置光標位置
 void gotoxy(int x, int y) {
     COORD pos;
     pos.X = x;
@@ -125,7 +143,19 @@ void map() {
     for (int i = 0; i < 80; i++) {
         gotoxy(i, 29);
         cout << "*";
-    }   
+    }  
+    for(int i = 80; i < 120; i++) {
+        gotoxy(i, 0);
+        cout << "*";
+    }
+    for (int j = 0; j < 30; j++) {
+        gotoxy(119, j);
+        cout << "*";
+    }
+    for(int i = 80; i < 120; i++) {
+        gotoxy(i, 29);
+        cout << "*";
+    }
 }
 
 // 打印蛇
@@ -163,7 +193,9 @@ void move_snake() {
 
 // 開始遊戲...
 void run() {
+    HP = 3;
     char ch;
+    table();
     while (1) {
         // 如果有改變方向的鍵盤輸入
         if (kbhit()) {
@@ -189,20 +221,23 @@ void run() {
         move_snake();
         // 如果撞牆
         if (hit_wall()) {
-            break;;
+            HP--;
+            if (HP == 0)         
+                break;
+            delete_snake();
+            init_snake();
+            table();
         }
         //打印蛇
         pri_snake();        
         // 如果吃食物
         if (eat_food()) {
-            score++;
+            level++;
             cre_food();
-        }
-        
-        
+            table();
+        }    
         Sleep(100);
     }
-    game_over();
 }
 
 // 隱藏光標
@@ -217,16 +252,21 @@ void hide_cursor()
 
 // 撞到牆
 int hit_wall() {
-    if (s_head -> x > 79 || s_head -> x < 1 || s_head -> y > 28 || s_head -> y < 2)
+    if (s_head -> x > 79 || s_head -> x < 1 || s_head -> y > 28 || s_head -> y < 1)
         return 1;
     return 0;
 }
 
-// 遊戲結束
+// 遊戲結束...
 void game_over() {
     system("cls");
-    cout << "game over" << endl;
-    system("pause");
+    player.level = level;
+    // 存入排行榜
+    write_rank();
+    // 讀取排行
+    read_rank();
+    // 打印排行榜
+    pri_rank();
 }
 
 // 生成食物
@@ -254,4 +294,114 @@ int eat_food() {
         cre_food();
     }
     return 0;
+}
+
+// 頭像跟分數表...
+void table() {
+    gotoxy(80, 3);
+    cout << "             ----------     " << endl;
+    gotoxy(80, 4);
+    cout << "            /           \\   " << endl;
+    gotoxy(80, 5);
+    cout << "           /   x          \\  " << endl;
+    gotoxy(80, 6);
+    cout << "          |                \\  " << endl;
+    gotoxy(80, 7);
+    cout << "          |  /\\     /|     |  " << endl;
+    gotoxy(80, 8);
+    cout << "           |/  |   /  |    |  " << endl;
+    gotoxy(80, 9); 
+    cout << "               |/      |  / " << endl;
+    gotoxy(80, 10);   
+    cout << "                       //     " << endl;
+    gotoxy(80, 11); 
+    cout << "                      //       " << endl;
+    gotoxy(80, 12); 
+    cout << "                    //           " << endl;
+    gotoxy(80, 13); 
+    cout << "                   //              " << endl;
+    gotoxy(80, 14); 
+    cout << "                 //   "          << endl;
+    gotoxy(80, 15); 
+    cout << "                \\\\         /   " << endl;
+    gotoxy(80, 16); 
+    cout << "                   --------      " << endl;
+    for (int i = 80; i < 120; i++) {
+        gotoxy(i, 18);
+        cout << "*";
+    }
+    // 分數表
+    gotoxy(86, 21);
+    cout << "level:" << level;
+    gotoxy(86, 23);
+    cout << "HP:" << HP;
+
+    //排行榜...
+
+}
+
+// 刪掉原本的蛇
+void delete_snake() {
+    level = 1;
+    snake *p = t_head;
+    while (p != nullptr) {
+        gotoxy(p -> x, p -> y);
+        cout << " ";
+        p = p -> next;
+    }
+    // 要把蛇頭畫回來 不然牆被吃掉了
+    gotoxy(s_head -> x, s_head -> y);
+    cout << "*";
+    delete s_head;
+    delete t_head;
+}
+
+// 成績存入排行
+void write_rank() {
+    ofstream file;
+    file.open("rank.dat", _S_app);
+    file << player.name << endl;
+    file << player.level << endl;
+    file.close();
+}
+
+// 讀取成績
+void read_rank() {
+    ifstream file;
+    file.open("rank.dat");
+    while (1) {
+        file >> rank_table[player_count].name;
+        file >> rank_table[player_count].level;
+        if (file.eof())
+            break;
+        player_count++;
+    }
+
+}
+
+// 打印排行
+void pri_rank() {
+    gotoxy(58, 1);
+    cout << "RANK";
+    for (int i = 0; i < player_count; i++) {
+        gotoxy(51, 4 + 3 * i);
+        cout << i + 1 << ".   NAME:" << rank_table[i].name << endl;
+        gotoxy(51, 5 + 3 * i);
+        cout << "     LEVEL:" << rank_table[i].level << endl;
+
+    }
+    gotoxy(0, 29);
+    cout << "ENTER TO BACK";
+    char ch;
+    // 消掉鍵盤緩衝
+    getchar();
+    while (!(ch = getchar()) == '\n') {
+        getchar();
+    }
+}
+
+// 獲取玩家數據
+void get_player() {
+    system("cls");
+    cout << "NAME:"; cin >> player.name;
 }

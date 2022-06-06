@@ -13,8 +13,14 @@ void run();
 void test();
 void game_over();
 void cre_food();
+void table();
+void re_cre_snake();
+void delete_snake();
+void write_rank();
+void pri_rank();
+void read_rank();
+void get_player();
 int hit_wall();
 int eat_food();
-
 
 #endif

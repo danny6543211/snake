@@ -5,7 +5,6 @@ using namespace std;
 
 int main() {
     
-    menu();
     start();
     
     return 0;
