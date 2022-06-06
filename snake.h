@@ -1,13 +1,12 @@
 #ifndef SNAKE_H_
 #define SNAKE_H_
 
-static int choice;
-
-void gotoxy(int x, int y);
+void gotoxy(int, int);
 void menu();
 void start();
 void init_snake();
 void map();
-// class point;
+void pri_snake();
+void move_snake();
 
 #endif
