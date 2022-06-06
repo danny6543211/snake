@@ -3,8 +3,17 @@
 #include<windows.h>
 using namespace std;
 
-
 int choice;
+
+// snake
+typedef struct _snake {
+    int x;
+    int y;
+    struct _snake *next;
+}snake;
+
+// 練表頭
+snake *t_head;
 
 // 菜單
 void menu() {
@@ -56,12 +65,7 @@ void gotoxy(int x, int y) {
     SetConsoleCursorPosition(hOut, pos);
 }
 
-// snake
-typedef struct _snake {
-    int x;
-    int y;
-    struct _snake *next;
-}snake;
+
 
 // 初始化蛇
 void init_snake() {
