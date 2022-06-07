@@ -426,4 +426,3 @@ void sort_rank() {
     file.close();
 }
 
-// 
