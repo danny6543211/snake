@@ -2,7 +2,7 @@
 #include "snake.h"
 using namespace std;
 
-int main() {
+int main() { 
     extern int choice;
     while (1) {
         menu();

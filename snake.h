@@ -22,5 +22,8 @@ void init_player();
 void sort_rank();
 int hit_wall();
 int eat_food();
+int ion_play_music();
+void play_music();
+void t_music();
 
 #endif

@@ -1,8 +1,15 @@
 #include<iostream>
-#include<fstream>
+#include <stdio.h>
+#include <string.h>
 #include<windows.h>
-#include<conio.h>
+#include <mmsystem.h>
+#include <tchar.h>
+#include <wchar.h>
+
+#include<thread>
 #include<ctime>
+#include<fstream>
+#include<conio.h>
 #include "snake.h"
 using namespace std;
 
@@ -43,6 +50,7 @@ int HP;
 score player;
 int player_count;
 score rank_table[50];
+int have_music = 0;
 
 // 菜單
 void menu() {
@@ -214,7 +222,12 @@ void run() {
             level++;
             cre_food();
             table();
-        }    
+        }
+        // // 判斷是否播放音樂
+        // if (play_music == 0) {
+        //     if (ion_play_music())
+        //         play_music();
+        // }
         Sleep(300 / level);
     }
 }
@@ -404,4 +417,26 @@ void sort_rank() {
     }
     file.close();
 }
+
+// // 是否播放音樂
+// int ion_play_music() {
+//     if (level > 6 && play_music == 0) {
+//         have_music = 1;
+//         return 1;
+//     }
+//     return 0;
+// }
+
+// // 播放音樂
+// void play_music() {
+//     thread th = thread(t_music);
+//     th.detach();
+// }
+
+// //
+// void t_music() {
+//     mciSendString("open music.mp3 alias bkmusic", NULL, 0, NULL);
+//     mciSendString(("play bkmusic repeat"), NULL, 0, NULL);
+//     system("pause");
+// }
 
