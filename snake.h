@@ -19,8 +19,10 @@ void delete_snake();
 void write_rank();
 void pri_rank();
 void read_rank();
-void get_player();
+void init_player();
+void sort_rank();
 int hit_wall();
 int eat_food();
+
 
 #endif

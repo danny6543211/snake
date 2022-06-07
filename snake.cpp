@@ -41,8 +41,8 @@ food fd;
 int level = 1;
 int HP;
 score player;
-int player_count = 0;
-score rank_table[9];
+int player_count;
+score rank_table[50];
 
 // 菜單
 void menu() {
@@ -77,10 +77,8 @@ void menu() {
 void start() {
     while (1) {
         menu();
-        if (choice == 3)
-            exit(0);
         if (choice == 1) {
-            get_player();
+            init_player();
             map();
             init_snake();
             cre_food();
@@ -89,8 +87,11 @@ void start() {
         }
         if (choice == 2) {
             read_rank();
+            sort_rank();
             pri_rank();
         }
+        if (choice == 3)
+            exit(0);
     }
 }
 
@@ -236,7 +237,7 @@ void run() {
             cre_food();
             table();
         }    
-        Sleep(100);
+        Sleep(300 / level);
     }
 }
 
@@ -257,7 +258,7 @@ int hit_wall() {
     return 0;
 }
 
-// 遊戲結束...
+// 遊戲結束
 void game_over() {
     system("cls");
     player.level = level;
@@ -265,6 +266,8 @@ void game_over() {
     write_rank();
     // 讀取排行
     read_rank();
+    // 排序排名
+    sort_rank();
     // 打印排行榜
     pri_rank();
 }
@@ -342,7 +345,6 @@ void table() {
 
 // 刪掉原本的蛇
 void delete_snake() {
-    level = 1;
     snake *p = t_head;
     while (p != nullptr) {
         gotoxy(p -> x, p -> y);
@@ -367,6 +369,7 @@ void write_rank() {
 
 // 讀取成績
 void read_rank() {
+    player_count = 0;
     ifstream file;
     file.open("rank.dat");
     while (1) {
@@ -376,13 +379,14 @@ void read_rank() {
             break;
         player_count++;
     }
-
+    file.close();
 }
 
 // 打印排行
 void pri_rank() {
     gotoxy(58, 1);
     cout << "RANK";
+    // 打印前十名
     for (int i = 0; i < player_count; i++) {
         gotoxy(51, 4 + 3 * i);
         cout << i + 1 << ".   NAME:" << rank_table[i].name << endl;
@@ -390,18 +394,36 @@ void pri_rank() {
         cout << "     LEVEL:" << rank_table[i].level << endl;
 
     }
-    gotoxy(0, 29);
-    cout << "ENTER TO BACK";
-    char ch;
-    // 消掉鍵盤緩衝
-    getchar();
-    while (!(ch = getchar()) == '\n') {
-        getchar();
-    }
+    gotoxy(0, 30);
+    system("pause");
 }
 
-// 獲取玩家數據
-void get_player() {
+// 初始化玩家數據
+void init_player() {
+    level = 1;
     system("cls");
     cout << "NAME:"; cin >> player.name;
 }
+
+// 排序排名
+void sort_rank() {
+    for (int i = 0; i < player_count; i++) {
+        for (int j = 0; j < player_count - i; j++) {
+            score temp;
+            if (rank_table[i].level < rank_table[i + 1].level) {
+                temp = rank_table[i];
+                rank_table[i] = rank_table[i + 1];
+                rank_table[i + 1] = temp;
+            }
+        }
+    }
+    ofstream file;
+    file.open("rank.dat");
+    for (int i = 0; i < player_count; i++) {
+        file << rank_table[i].name << endl;
+        file << rank_table[i].level << endl;
+    }
+    file.close();
+}
+
+// 
