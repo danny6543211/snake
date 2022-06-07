@@ -4,7 +4,6 @@
 void hide_cursor();
 void gotoxy(int, int);
 void menu();
-void start();
 void init_snake();
 void map();
 void pri_snake();
@@ -23,6 +22,5 @@ void init_player();
 void sort_rank();
 int hit_wall();
 int eat_food();
-
 
 #endif

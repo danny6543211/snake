@@ -1,9 +1,9 @@
-#include "snake.h"
 #include<iostream>
 #include<fstream>
 #include<windows.h>
 #include<conio.h>
 #include<ctime>
+#include "snake.h"
 using namespace std;
 
 // snake
@@ -73,28 +73,6 @@ void menu() {
     hide_cursor();
 }
 
-// 開始函數...
-void start() {
-    while (1) {
-        menu();
-        if (choice == 1) {
-            init_player();
-            map();
-            init_snake();
-            cre_food();
-            run();
-            game_over();
-        }
-        if (choice == 2) {
-            read_rank();
-            sort_rank();
-            pri_rank();
-        }
-        if (choice == 3)
-            exit(0);
-    }
-}
-
 // 設置光標位置
 void gotoxy(int x, int y) {
     COORD pos;
@@ -124,7 +102,7 @@ void init_snake() {
     s_head -> next = nullptr;
 }
 
-//地圖
+//畫地圖
 void map() {
     int temp;
     for (int i = 0; i < 80; i++) {
@@ -387,7 +365,7 @@ void pri_rank() {
     gotoxy(58, 1);
     cout << "RANK";
     // 打印前十名
-    for (int i = 0; i < player_count; i++) {
+    for (int i = 0; i < player_count && i < 10; i++) {
         gotoxy(51, 4 + 3 * i);
         cout << i + 1 << ".   NAME:" << rank_table[i].name << endl;
         gotoxy(51, 5 + 3 * i);
@@ -402,6 +380,7 @@ void pri_rank() {
 void init_player() {
     level = 1;
     system("cls");
+    gotoxy(52 ,13);
     cout << "NAME:"; cin >> player.name;
 }
 
