@@ -108,6 +108,7 @@ void pri_rank() {
 
     }
     gotoxy(0, 30);
+    Sleep(1500);
     system("pause");
 }
 
@@ -116,10 +117,10 @@ void sort_rank() {
     for (int i = 0; i < player_count; i++) {
         for (int j = 0; j < player_count - i; j++) {
             score temp;
-            if (rank_table[i].level < rank_table[i + 1].level) {
-                temp = rank_table[i];
-                rank_table[i] = rank_table[i + 1];
-                rank_table[i + 1] = temp;
+            if (rank_table[j].level < rank_table[j + 1].level) {
+                temp = rank_table[j];
+                rank_table[j] = rank_table[j + 1];
+                rank_table[j + 1] = temp;
             }
         }
     }

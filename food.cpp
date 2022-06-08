@@ -5,13 +5,20 @@
 using namespace std;
 
 food fd;
+h_food h_fd;
+int h_level = 0;
+extern int level;
+int have_h_food = 0;
+
+void food::draw(char ch) {
+    gotoxy(x, y);
+    cout << ch;
+}
 
 void food::cre_food() {
     srand(time(nullptr));
-    x = rand() % 79 + 1;
-    y = rand() % 26 + 2;
-    gotoxy(x, y);
-    cout << "*";
+    set_xy(rand() % 79 + 1, rand() % 26 + 2);
+    this -> draw('*');
 }
 
 int food::eat_food(snake player) {
@@ -29,4 +36,15 @@ int food::eat_food(snake player) {
         cre_food();
     }
     return 0;
+}
+
+void food::set_xy(int a, int b) {
+    x = a;
+    y = b;
+}
+
+void h_food::cre_food() {
+    srand(time(nullptr));
+    set_xy((rand() + level) % 79 + 1, (rand() + level) % 26 + 2);
+    this -> draw('&');
 }

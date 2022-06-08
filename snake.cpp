@@ -5,6 +5,7 @@
 #include "global.h"
 #include "food.h"
 #include "player.h"
+#include "map.h"
 using namespace std;
 
 void snake::init_snake() {
@@ -101,8 +102,13 @@ void run_player(snake player) {
     char ch;
     extern int HP;
     extern int level;
+    extern int have_h_food;
+    extern int h_level;
+    extern food fd;
+    extern h_food h_fd;
     table();
     while (1) {
+        Sleep(200 / level + (3 / HP) * 5);
         // 如果有改變方向的鍵盤輸入
         if (kbhit()) {
             ch = getch();
@@ -128,21 +134,45 @@ void run_player(snake player) {
         // 如果撞牆
         if (player.hit_wall()) {
             HP--;
-            if (HP == 0)         
+            if (HP == 0)
                 break;
             player.delete_snake();
             player.init_snake();
             table();
+            pri_hp();
+            system("cls");
+            table();
+            map();
+            if (h_level)
+                h_fd.cre_food();
+            else 
+                fd.cre_food();
         }
         //打印蛇
-        player.pri_snake();        
-        // 如果吃食物
-        extern food fd;
-        if (fd.eat_food(player)) {
-            level++;
-            fd.cre_food();
-            table();
+        player.pri_snake(); 
+
+
+
+        if (h_level == 0) {
+            if (fd.eat_food(player)) {
+                level++;
+                table();
+                if (level > 5) {
+                    h_level = 1;
+                    continue;
+                }
+                fd.cre_food();
+            }
+        } else if (h_level == 1) {
+            if (have_h_food == 0) {
+                h_fd.cre_food();
+                have_h_food = 1;
+            }
+            if (h_fd.eat_food(player)) {
+                level += 2;
+                h_fd.cre_food();
+                table();
+            }
         }
-        Sleep(300 / level);
     }   
 }

@@ -1,4 +1,5 @@
 #include<iostream>
+#include<windows.h>
 #include "map.h"
 #include "global.h"
 using namespace std;
@@ -65,4 +66,12 @@ void map() {
         cout << "*";
     }
     gotoxy(0, 0);
+}
+
+void pri_hp() {
+    extern int HP;
+    system("cls");
+    gotoxy(52 ,13);
+    cout << "HP:" << HP;
+    Sleep(3000);
 }
