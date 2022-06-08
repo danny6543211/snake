@@ -10,11 +10,12 @@ enum _DICT {
 };
 
 // 蛇的點
-typedef struct _snake_dot {
-    int x;
-    int y;
-    _snake_dot *next;
-} snake_dot;
+class snake_dot {
+    public:
+        int x;
+        int y;
+        snake_dot *next;
+};
 
 // 蛇類
 class snake {
@@ -41,7 +42,7 @@ class snake {
         void set_s_head(snake_dot *hd);
         //
     private:
-        // 練表頭
+        // 鍊表頭
         snake_dot *t_head;
         // 蛇頭
         snake_dot *s_head;
