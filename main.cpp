@@ -1,17 +1,24 @@
 #include<iostream>
+#include<windows.h>
+#include "map.h"
 #include "snake.h"
+#include "food.h"
+#include "player.h"
 using namespace std;
+
 
 int main() { 
     extern int choice;
+    extern food fd;
+    extern snake player;
     while (1) {
         menu();
         if (choice == 1) {
             init_player();
             map();
-            init_snake();
-            cre_food();
-            run();
+            player.init_snake();
+            fd.cre_food();
+            run_player(player);
             game_over();
         }
         if (choice == 2) {
