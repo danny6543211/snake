@@ -439,4 +439,3 @@ void sort_rank() {
 //     mciSendString(("play bkmusic repeat"), NULL, 0, NULL);
 //     system("pause");
 // }
-
