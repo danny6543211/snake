@@ -1,2 +1,2 @@
 # snake
-貪食蛇 in linux
+貪食蛇
